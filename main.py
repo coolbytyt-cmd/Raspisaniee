@@ -106,7 +106,7 @@ def parse_day_text(raw_text):
                 "subject": subject,
                 "room": room if room else "Аудитория не указана",
                 "homework": "\n".join(hw_lines),
-                "marks": raw_marks
+                "marks": raw_marks,
             })
     return lessons
 
@@ -186,20 +186,14 @@ def main(page: ft.Page):
             ]
             if has_cdz:
                 target_url = item.get("cdz_url") or "https://mos.ru"
-                hw_panel_items.append(
-                    ft.Row(
-                        [
-                            ft.ElevatedButton(
-                                "Перейти на ЦДЗ →",
-                                bgcolor="#383840",
-                                color="#FFFFFF",
-                                height=30,
-                                on_click=lambda e, u=target_url: page.launch_url(u),
-                            )
-                        ],
-                        alignment=ft.MainAxisAlignment.END,
-                    )
+                cdz_btn = ft.ElevatedButton(
+                    "Перейти на ЦДЗ →",
+                    bgcolor="#383840",
+                    color="#FFFFFF",
+                    height=30,
+                    on_click=lambda e, u=target_url: page.launch_url(u),
                 )
+                hw_panel_items.append(ft.Row([cdz_btn], alignment=ft.MainAxisAlignment.END))
 
             hw_container = ft.Container(
                 content=ft.Column(hw_panel_items, spacing=6),
@@ -252,15 +246,19 @@ def main(page: ft.Page):
                     )
                 )
 
-            main_row = ft.Row(
+            time_col = ft.Column(
                 [
-                    ft.Column(
-                        [
-                            ft.Text(item.get("start", ""), size=15, weight=ft.FontWeight.BOLD, color="#FFFFFF"),
-                            ft.Text(item.get("end", ""), size=12, color="#9A9AA2"),
-                        ],
-                        spacing=2,
-                        width=46,
-                    ),
-                    ft.Container(width=3, height=44, bgcolor="#E5E5EA", border_radius=2),
-                    ft.Column(
+                    ft.Text(item.get("start", ""), size=15, weight=ft.FontWeight.BOLD, color="#FFFFFF"),
+                    ft.Text(item.get("end", ""), size=12, color="#9A9AA2"),
+                ],
+                spacing=2,
+                width=46,
+            )
+            pill_bar = ft.Container(width=3, height=44, bgcolor="#E5E5EA", border_radius=2)
+            info_col = ft.Column([ft.Row(top_badges, spacing=6), subj_text], spacing=5, expand=True)
+            main_row = ft.Row([time_col, pill_bar, info_col], spacing=12)
+
+            return ft.Container(
+                content=ft.Column([main_row, hw_container], spacing=0),
+                bgcolor="#202024",
+                border=ft.border.all(1, "#36363E"),
