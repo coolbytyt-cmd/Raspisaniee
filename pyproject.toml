@@ -1,0 +1,10 @@
+[project]
+name = "raspisanie"
+version = "1.0.0"
+description = "Rасписание"
+requires-python = ">=3.9"
+dependencies = ["flet==0.25.2"]
+
+[tool.flet]
+org = "ru.roy.mesh"
+product = "Rасписание"
