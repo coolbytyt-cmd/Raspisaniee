@@ -126,7 +126,7 @@ def main(page: ft.Page):
         page.title = "Rасписание"
         page.bgcolor = "#141417"
         page.theme_mode = ft.ThemeMode.DARK
-        page.padding = ft.padding.only(top=36, left=14, right=14, bottom=14)
+        page.padding = 0
 
         cache = load_initial_cache()
 
@@ -134,16 +134,16 @@ def main(page: ft.Page):
         selected_date = today + timedelta(days=1) if today.weekday() == 6 else today
         week_monday = selected_date - timedelta(days=selected_date.weekday())
 
-        title_lbl = ft.Text("Сегодня", size=20, weight=ft.FontWeight.BOLD, color="#FFFFFF")
+        title_lbl = ft.Text("Сегодня", size=18, weight=ft.FontWeight.BOLD, color="#FFFFFF")
         count_lbl = ft.Container(
-            content=ft.Text("0 уроков", size=12, weight=ft.FontWeight.BOLD, color="#FFFFFF"),
+            content=ft.Text("0 уроков", size=11, weight=ft.FontWeight.BOLD, color="#FFFFFF"),
             bgcolor="#26262B",
             border=ft.border.all(1, "#3E3E45"),
-            border_radius=11,
-            padding=ft.padding.symmetric(horizontal=10, vertical=4),
+            border_radius=10,
+            padding=ft.padding.symmetric(horizontal=8, vertical=3),
         )
 
-        week_row = ft.Row(spacing=6, alignment=ft.MainAxisAlignment.SPACE_BETWEEN)
+        week_row = ft.Row(spacing=4, alignment=ft.MainAxisAlignment.SPACE_BETWEEN)
         cards_col = ft.Column(spacing=10, scroll=ft.ScrollMode.AUTO, expand=True)
 
         def save_storage_safe():
@@ -190,7 +190,7 @@ def main(page: ft.Page):
                     "Перейти на ЦДЗ →",
                     bgcolor="#383840",
                     color="#FFFFFF",
-                    height=30,
+                    height=32,
                     on_click=lambda e, u=target_url: page.launch_url(u),
                 )
                 hw_panel_items.append(ft.Row([cdz_btn], alignment=ft.MainAxisAlignment.END))
@@ -216,7 +216,7 @@ def main(page: ft.Page):
 
             def toggle_expand(e):
                 hw_container.visible = not hw_container.visible
-                subj_text.max_lines = 10 if hw_container.visible else 2
+                subj_text.max_lines = 12 if hw_container.visible else 2
                 page.update()
 
             top_badges = [ft.Text(f"Урок {idx}" if idx > 0 else "Инфо", size=12, weight=ft.FontWeight.BOLD, color="#A0A0A8")]
@@ -232,7 +232,7 @@ def main(page: ft.Page):
                         bgcolor="#23384D",
                         border=ft.border.all(1, "#4A78A6"),
                         border_radius=8,
-                        padding=ft.padding.symmetric(horizontal=8, vertical=2),
+                        padding=ft.padding.symmetric(horizontal=7, vertical=2),
                     )
                 )
             if not is_sat or (room_str not in ("Аудитория не указана", "Нет данных")):
@@ -242,23 +242,25 @@ def main(page: ft.Page):
                         bgcolor="#2F2F36",
                         border=ft.border.all(1, "#484852"),
                         border_radius=8,
-                        padding=ft.padding.symmetric(horizontal=8, vertical=2),
+                        padding=ft.padding.symmetric(horizontal=7, vertical=2),
                     )
                 )
 
             time_col = ft.Column(
                 [
-                    ft.Text(item.get("start", ""), size=15, weight=ft.FontWeight.BOLD, color="#FFFFFF"),
+                    ft.Text(item.get("start", ""), size=14, weight=ft.FontWeight.BOLD, color="#FFFFFF"),
                     ft.Text(item.get("end", ""), size=12, color="#9A9AA2"),
                 ],
                 spacing=2,
-                width=46,
+                width=44,
             )
             pill_bar = ft.Container(width=3, height=44, bgcolor="#E5E5EA", border_radius=2)
-            info_col = ft.Column([ft.Row(top_badges, spacing=6), subj_text], spacing=5, expand=True)
-            main_row = ft.Row([time_col, pill_bar, info_col], spacing=12)
+            info_col = ft.Column([ft.Row(top_badges, spacing=5), subj_text], spacing=5, expand=True)
+            main_row = ft.Row([time_col, pill_bar, info_col], spacing=10)
 
             return ft.Container(
                 content=ft.Column([main_row, hw_container], spacing=0),
                 bgcolor="#202024",
                 border=ft.border.all(1, "#36363E"),
+                border_radius=18,
+                padding=13,
